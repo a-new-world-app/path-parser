@@ -27,7 +27,9 @@ def parse_steps(steps, directory):
 
         images = filter(lambda u: u != 'null', point['images'])
         point['images'] = [point_images[point['name']][url] for url in images]
-
+        if 'name' in point:
+            point['descriptions'] = [point['name']]
+            del point['names']
     for step in steps:
         parse_point(step['start_point'])
         parse_point(step['end_point'])
