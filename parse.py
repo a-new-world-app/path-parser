@@ -15,7 +15,7 @@ def parse_steps(steps, directory):
         if 'resource' in point:
             del point['resource']
         if 'images' not in point:
-            point['images'] = []
+            point['images'] = ['null']
         current = point_images[point['name']]
         for url in point['images']:
             if not (url == 'null' or url in current):
@@ -30,6 +30,9 @@ def parse_steps(steps, directory):
         if 'name' in point:
             point['descriptions'] = [point['name']]
             del point['names']
+        if 'images' in point: 
+            string = point['images'][0]
+            point['images'] = { 'filename': string}
     for step in steps:
         parse_point(step['start_point'])
         parse_point(step['end_point'])
