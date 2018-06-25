@@ -29,21 +29,23 @@ def parse_steps(steps, directory):
         point['images'] = [point_images[point['name']][url] for url in images]
         if 'name' in point:
             point['descriptions'] = [point['name']]
-            del point['names']
+            del point['name']
         if 'images' in point: 
-            string = point['images'][0]
+            string = 'null'
+            if len(point['images']) > 0:
+                string = point['images'][0]
             point['images'] = { 'filename': string}
     for step in steps:
         parse_point(step['start_point'])
         parse_point(step['end_point'])
 
 
-def parse_path(path):
+def parse_path(path, idx):
     if len(path['pathData'].get('steps', [])) < 2:
         return
 
     path_id = path['_id']
-    directory = f'path_{path_id}'
+    directory = f'path_{idx}'
     os.makedirs(directory)
     os.makedirs(os.path.join(directory, 'img'))
     parsed_path = {}
@@ -65,5 +67,10 @@ url = 'https://a-new-world.herokuapp.com/api/completed_paths'
 headers = {'Authorization': f'Bearer {keys.API_ACCESS_TOKEN}'}
 r = requests.get(url, headers=headers)
 
+i = 0;
+
 for path in r.json():
-    parse_path(path)
+    parse_path(path, i)
+    i += 1
+
+
